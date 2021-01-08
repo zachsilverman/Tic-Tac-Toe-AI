@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="style.css">
+  <script src="game.js" defer></script>
+  <title>Tick-Tac-Toe</title>
+
+</head>
+<body>
+  <div start class = "start">
+      <div startText>start</div>
+      <button id = 'x'>X?</button>
+      <button id = 'o'>O?</button>
+  </div>
+  <div class="board" id="board" board>
+    <div class="cell top-left 0" data-cell></div>
+    <div class="cell top-middle 1" data-cell></div>
+    <div class="cell top-right 2" data-cell></div>
+    <div class="cell middle-left 3" data-cell></div>
+    <div class="cell middle-middle 4" data-cell></div>
+    <div class="cell middle-right 5" data-cell></div>
+    <div class="cell bottom-left 6" data-cell></div>
+    <div class="cell bottom-middle 7" data-cell></div>
+    <div class="cell bottom-right 8" data-cell></div>
+    
+  </div>
+  <div class="winning-message" id="winningMessage">
+    <div data-winning-message-text></div>
+    <button onClick="window.location.reload();" id="restartButton">Restart</button>
+  </div>
+</body>
+</html>
