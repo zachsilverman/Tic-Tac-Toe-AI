@@ -28,7 +28,7 @@ let firstBoard = '012345678';
 let buttons = [xButton,oButton];
 
 for(let button of buttons){
-    button.addEventListener('click',buttonClick,{once:true});
+        button.addEventListener('click',buttonClick,{once:true});
 }
 
 
@@ -37,7 +37,6 @@ function buttonClick(e){
     if(button.id === 'x'){
         humanPlayer = 'x'
         aiPlayer = 'o'
-        console.log(startScreen)
         startScreen.classList.add('settled')
         boardTurn.classList.add('settled')
         boardTurn.classList.add('x')
@@ -50,6 +49,22 @@ function buttonClick(e){
     }
     if(startScreen.classList.contains('settled')){
         startScreen.classList.add('ready');
+        if(aiPlayer === 'x'){
+            let currentBoard = createBoard();
+            let future = best_move(boardHash(currentBoard));
+            let newMove = (turn(currentBoard) === 'x') ? 'x' : 'o'
+            cellElements[future].classList.add(newMove);
+            currentBoard = currentBoard.replace(future,'x')
+           
+            let theWinner = winner(currentBoard);
+            if(theWinner === 'x'){
+                endGame(theWinner);
+            }else if(theWinner === 'o'){
+                endGame(theWinner);
+            }else if(theWinner === '-'){
+                endGame(theWinner);
+            } 
+        }
     }
 }
 
@@ -64,22 +79,22 @@ function startGame(){
 }
 
 startGame()
+console.log('hi')
+
 for(cell of cellElements){
     cell.addEventListener('click',handleClick,{once:true}) 
 }
 
 function handleClick(e){
     const cell = e.target;
-    let currentClass =  humanPlayer;
     if(startScreen.classList.contains('ready'))
-        placeMark(cell,currentClass);
+        placeMark(cell,humanPlayer);
+
     let currentBoard = createBoard();
-    console.log(currentBoard)
     let future = best_move(boardHash(currentBoard));
     let newMove = (turn(currentBoard) === 'x') ? 'x' : 'o'
     cellElements[future].classList.add(newMove);
-    currentBoard = currentBoard.replace(future,'o')
-    console.log(currentBoard)
+    currentBoard = currentBoard.replace(future,aiPlayer)
     let theWinner = winner(currentBoard);
     if(theWinner === 'x'){
         endGame(theWinner);
@@ -87,9 +102,9 @@ function handleClick(e){
         endGame(theWinner);
     }else if(theWinner === '-'){
         endGame(theWinner);
-    }
- 
+    } 
 }
+
 
 
 function placeMark(cell,currentClass){
@@ -323,4 +338,3 @@ function best_move(boardIndex){
     }
     return index;
 }
-
