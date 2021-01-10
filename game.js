@@ -87,30 +87,36 @@ for(cell of cellElements){
 
 function handleClick(e){
     const cell = e.target;
-    if(startScreen.classList.contains('ready'))
-        placeMark(cell,humanPlayer);
-
-    let currentBoard = createBoard();
-    let future = best_move(boardHash(currentBoard));
-    let newMove = (turn(currentBoard) === 'x') ? 'x' : 'o'
-    cellElements[future].classList.add(newMove);
-    currentBoard = currentBoard.replace(future,aiPlayer)
-    let theWinner = winner(currentBoard);
-    if(theWinner === 'x'){
-        endGame(theWinner);
-    }else if(theWinner === 'o'){
-        endGame(theWinner);
-    }else if(theWinner === '-'){
-        endGame(theWinner);
-    } 
+    if(startScreen.classList.contains('ready') && isAvailable(cell)){
+        placeMark(cell,humanPlayer);   
+            let currentBoard = createBoard();
+        console.log(currentBoard)
+        let future = best_move(boardHash(currentBoard));
+        let newMove = (turn(currentBoard) === 'x') ? 'x' : 'o'
+        cellElements[future].classList.add(newMove);
+        currentBoard = currentBoard.replace(future,aiPlayer)
+        let theWinner = winner(currentBoard);
+        if(theWinner === 'x'){
+            endGame(theWinner);
+        }else if(theWinner === 'o'){
+            endGame(theWinner);
+        }else if(theWinner === '-'){
+            endGame(theWinner);
+        }  
+    }
 }
+
+function isAvailable(cell){
+    return !(cell.classList.contains('x') || cell.classList.contains('o'))
+}
+
 
 
 
 function placeMark(cell,currentClass){
     boardTurn.classList.remove('o');
     boardTurn.classList.remove('x');
-    if(currentClass === 'x') // if we are currently a x then we have to switch to o for the next turn
+    if(currentClass === 'x' ) // if we are currently a x then we have to switch to o for the next turn
         boardTurn.classList.add('x');
     else if(currentClass === 'o')
         boardTurn.classList.add('o');
