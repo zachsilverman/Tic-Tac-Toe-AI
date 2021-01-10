@@ -50,20 +50,7 @@ function buttonClick(e){
     if(startScreen.classList.contains('settled')){
         startScreen.classList.add('ready');
         if(aiPlayer === 'x'){
-            let currentBoard = createBoard();
-            let future = best_move(boardHash(currentBoard));
-            let newMove = (turn(currentBoard) === 'x') ? 'x' : 'o'
-            cellElements[future].classList.add(newMove);
-            currentBoard = currentBoard.replace(future,'x')
-           
-            let theWinner = winner(currentBoard);
-            if(theWinner === 'x'){
-                endGame(theWinner);
-            }else if(theWinner === 'o'){
-                endGame(theWinner);
-            }else if(theWinner === '-'){
-                endGame(theWinner);
-            } 
+            makeMove();
         }
     }
 }
@@ -89,21 +76,25 @@ function handleClick(e){
     const cell = e.target;
     if(startScreen.classList.contains('ready') && isAvailable(cell)){
         placeMark(cell,humanPlayer);   
-            let currentBoard = createBoard();
-        console.log(currentBoard)
-        let future = best_move(boardHash(currentBoard));
-        let newMove = (turn(currentBoard) === 'x') ? 'x' : 'o'
-        cellElements[future].classList.add(newMove);
-        currentBoard = currentBoard.replace(future,aiPlayer)
-        let theWinner = winner(currentBoard);
-        if(theWinner === 'x'){
-            endGame(theWinner);
-        }else if(theWinner === 'o'){
-            endGame(theWinner);
-        }else if(theWinner === '-'){
-            endGame(theWinner);
-        }  
+        makeMove();
     }
+}
+
+function makeMove(){
+    let currentBoard = createBoard();
+    console.log(currentBoard)
+    let future = best_move(boardHash(currentBoard));
+    let newMove = (turn(currentBoard) === 'x') ? 'x' : 'o'
+    cellElements[future].classList.add(newMove);
+    currentBoard = currentBoard.replace(future,aiPlayer)
+    let theWinner = winner(currentBoard);
+    if(theWinner === 'x'){
+        endGame(theWinner);
+    }else if(theWinner === 'o'){
+        endGame(theWinner);
+    }else if(theWinner === '-'){
+        endGame(theWinner);
+    }  
 }
 
 function isAvailable(cell){
