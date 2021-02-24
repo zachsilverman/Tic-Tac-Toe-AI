@@ -9,7 +9,7 @@ const wins = [
   [2, 4, 6] // / diagonal
 ]
 
-//array of 3^9 (all combinations of Tic-Tac-Toe Gammes 19683 games)
+//array of 3^9 (all combinations of Tic-Tac-Toe Games 19683 games)
 let hashTable = []
 const hsize = 19683
 const cellElements = document.querySelectorAll('[data-cell]');
@@ -79,7 +79,7 @@ function handleClick(e){
         makeMove();
     }
 }
-
+//place human move on board as well as generate best computer move
 function makeMove(){
     let currentBoard = createBoard();
     console.log(currentBoard)
@@ -129,7 +129,7 @@ function turn(board){
         return 'o'
     }
 }
-
+//calculate number of moves made
 function depthOfBoardStr(board){
     let count = 0
     for(let c of board){
@@ -139,7 +139,7 @@ function depthOfBoardStr(board){
     }
     return count
 }
-
+//generate board based on html cell elements
 function createBoard(){
     
     let board = '012345678';
@@ -203,7 +203,7 @@ function boardHash(board){
     return total;
 }
 
-
+//initialize hashtable
 function init_boards(){
     for(let i = 0; i < hsize; i++){
         let obj =  {
@@ -232,18 +232,22 @@ function join_graph(board){
   let hashIndex = boardHash(board);
   let tempBoard; 
   let turnVal;
+  //base case for our recursion, if we hit a winner in a given board node in the table
+  // then we know that board cannot have further moves
     if (winner(board) === 'x' || winner(board) === 'o' || winner(board) === '-' ){
         for (let i = 0; i < 9; i++){
             hashTable[hashIndex].move[i] = -1;
         }
         return;
     }   
-
+    //generate the remaining board combinations of a given board
     for (let i = 0; i < 9; i++){
+      //if there is already a x or o in that position that index within the moves array is illegal
+      //meaning the computer cannot go there
         if (board[i] === 'x' || board[i] === 'o'){
             hashTable[hashIndex].move[i] = -1;
         }
-        
+        //if we have a open spot on the board
         else if (board[i] >= '0' && board[i] <= '8'){
             tempBoard = board
             turnVal = turn(board);
@@ -251,6 +255,7 @@ function join_graph(board){
             hashTable[hashIndex].move[i] = boardHash(tempBoard);
             if (hashTable[boardHash(tempBoard)].init == 0){
                 init_board(tempBoard);
+              //find the board combinations of the new board
                 join_graph(tempBoard);
             }
         }
@@ -270,7 +275,9 @@ function print_node(board_node){
   }
 }
 
-
+//this function computes the score of every possibe move in the game
+//this starts at a full board and computes score of every full board
+//when there are no more full boards left then you compute the score of the maximum score of a given nodes child
 function compute_score(){
     let childNode = 0;
     for (let depthCount = 9; depthCount >= 0; depthCount--){
@@ -314,7 +321,8 @@ function compute_score(){
     }
 }
 
-
+//this function goes through a given board index and generates the best index in the hashtable to go to next
+//ie what is the best move
 function best_move(boardIndex){
     let childNode = 0;
     let min = 1000000;
@@ -323,10 +331,12 @@ function best_move(boardIndex){
     for (let j = 0; j < 9; j++){
         childNode = hashTable[boardIndex].move[j];
         if (childNode != -1){
+          //if x is our turn the highest score would be the maximum score in a given child node
             if (hashTable[boardIndex].turn == 'x' && hashTable[childNode].score > max){
                 max = hashTable[childNode].score;
                 index = j;
             }
+          //if o is our turn the highest score would be the minimum score in a given child node
             if (hashTable[boardIndex].turn == 'o' && min > hashTable[childNode].score){
                 min = hashTable[childNode].score;
                 index = j;
